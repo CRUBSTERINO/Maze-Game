@@ -16,7 +16,7 @@ namespace Maze_Game
 
             Rect gameWorldSize = new Rect(0, 0, 30, 30);
 
-            SetConsoleScreenSize(consoleSize);
+            ConfigureConsole(consoleSize);
 
             GameWorld gameWorld = new GameWorld(gameWorldSize);
 
@@ -26,14 +26,17 @@ namespace Maze_Game
 
             GameObject playerGameObject = new GameObject(new IntVector2(2, 1));
             gameWorld.Create(playerGameObject);
-            playerGameObject.AddComponent(new CharRenderer(playerGameObject, '@'));
+            playerGameObject.AddComponent(new CharRenderer('@', playerGameObject));
+            playerGameObject.AddComponent(new PlayerController(1, playerGameObject));
 
             mazeGameLoop.StartGameLoop();
         }
 
         [SupportedOSPlatform("windows")]
-        public static void SetConsoleScreenSize(IntVector2 size)
+        public static void ConfigureConsole(IntVector2 size)
         {
+            Console.CursorVisible = false;
+
             Console.SetWindowSize(size.X, size.Y);
             Console.SetBufferSize(size.X, size.Y);
         }

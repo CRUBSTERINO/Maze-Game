@@ -22,10 +22,10 @@ namespace Maze_Game.Rendering
             List<Renderer> renderers = _gameWorld.FindAllComponentsInWorld<Renderer>();
             char hitChar = ' ';
 
-            for (int y = 1;  y < _viewportSize.Y; y++)
+            for (int y = 1;  y <= _viewportSize.Y; y++)
             {
                 rowSb.Clear();
-                for (int x = 1;  x < _viewportSize.X; x++)
+                for (int x = 1;  x <= _viewportSize.X; x++)
                 {
                     bool didHitRenderer = false;
 
@@ -47,6 +47,11 @@ namespace Maze_Game.Rendering
                     }
                 }
 
+                if (y == _viewportSize.Y)
+                {
+                    frameSb.Append(rowSb.ToString());
+                    break;
+                }
                 frameSb.AppendLine(rowSb.ToString());
             }
 

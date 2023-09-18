@@ -38,8 +38,8 @@ namespace Maze_Game.GameLoop
 
         private void DisplayRenderedFrame(string renderedFrame)
         {
-            Console.SetCursorPosition(0, 0);
             Console.Write(renderedFrame);
+            Console.SetCursorPosition(0, 0);
         }
     }
 }

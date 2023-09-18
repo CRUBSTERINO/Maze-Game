@@ -49,6 +49,12 @@ namespace Maze_Game
             _components.Add(component);
         }
 
+        public void Move(IntVector2 deltaMovement)
+        {
+            IntVector2 newPosition = new IntVector2(_position.X + deltaMovement.X, _position.Y + deltaMovement.Y);
+            _position = newPosition;
+        }
+
         public void Start()
         {
             foreach (var component in _components)
