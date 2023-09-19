@@ -1,6 +1,4 @@
-﻿using System.Numerics;
-
-namespace Maze_Game.Math
+﻿namespace Maze_Game.Math
 {
     public struct IntVector2
     {
@@ -13,6 +11,18 @@ namespace Maze_Game.Math
         {
             _x = x;
             _y = y;
+        }
+
+        public static IntVector2 operator +(IntVector2 a, IntVector2 b)
+        {
+            IntVector2 c = new IntVector2(a.X + b.X, a.Y + b.Y);
+            return c;
+        }
+
+        public static IntVector2 operator -(IntVector2 a, IntVector2 b)
+        {
+            IntVector2 c = new IntVector2(a.X - b.X, a.Y - b.Y);
+            return c;
         }
     }
 }

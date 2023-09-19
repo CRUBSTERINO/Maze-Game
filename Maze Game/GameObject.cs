@@ -53,7 +53,7 @@ namespace Maze_Game
 
         public void Move(IntVector2 deltaMovement)
         {
-            IntVector2 newPosition = new IntVector2(_position.X + deltaMovement.X, _position.Y + deltaMovement.Y);
+            IntVector2 newPosition = _position + deltaMovement;
             _position = newPosition;
         }
 
