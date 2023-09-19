@@ -1,17 +1,19 @@
-﻿using Maze_Game.Math;
-using System.Net.Http.Headers;
+﻿using Maze_Game.GameWorlds;
+using Maze_Game.Math;
 
 namespace Maze_Game
 {
     public class GameObject
     {
+        private GameWorld _gameWorld;
         private IntVector2 _position;
         private List<Component> _components;
 
         public IntVector2 Position => _position;
 
-        public GameObject(IntVector2 position)
+        public GameObject(GameWorld gameWorld, IntVector2 position)
         {
+            _gameWorld = gameWorld;
             _components = new List<Component>();
             _position = position;
         }
@@ -53,6 +55,11 @@ namespace Maze_Game
         {
             IntVector2 newPosition = new IntVector2(_position.X + deltaMovement.X, _position.Y + deltaMovement.Y);
             _position = newPosition;
+        }
+
+        public void Create()
+        {
+            _gameWorld.Create(this);
         }
 
         public void Start()

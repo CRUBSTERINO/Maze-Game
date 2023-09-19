@@ -1,6 +1,5 @@
 ﻿using Maze_Game.GameWorlds;
 using Maze_Game.Rendering;
-using System.Security.AccessControl;
 
 namespace Maze_Game.GameLoop
 {
