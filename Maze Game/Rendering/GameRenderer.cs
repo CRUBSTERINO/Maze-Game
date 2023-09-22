@@ -22,7 +22,7 @@ namespace Maze_Game.Rendering
             List<Renderer> renderers = _gameWorld.FindAllComponentsInWorld<Renderer>();
             char hitChar = ' ';
 
-            for (int y = 0;  y < _viewportSize.Y; y++)
+            for (int y = 0;  y <= _viewportSize.Y; y++)
             {
                 rowSb.Clear();
                 for (int x = 0;  x < _viewportSize.X; x++)

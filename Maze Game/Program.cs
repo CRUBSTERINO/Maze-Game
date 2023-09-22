@@ -11,9 +11,18 @@ namespace Maze_Game
     {
         static void Main(string[] args)
         {
-            IntVector2 viewportSize = new IntVector2(30, 35);
-            IntVector2 consoleSize = new IntVector2(30, 35);
-            Rect gameWorldSize = new Rect(0, 0, 30, 35);
+            const int gameFieldWidth = 30;
+            const int gameFieldHeight = 35;
+
+            const int mazeWidth = 30;
+            const int mazeHeight = 30;
+
+            const char playerChar = '@';
+            const char mazeWallChar = '█';
+
+            IntVector2 viewportSize = new IntVector2(gameFieldWidth, gameFieldHeight);
+            IntVector2 consoleSize = new IntVector2(gameFieldWidth, gameFieldHeight);
+            Rect gameWorldSize = new Rect(0, 0, gameFieldWidth, gameFieldWidth);
 
             ConfigureConsole(consoleSize);
 
@@ -23,27 +32,26 @@ namespace Maze_Game
 
             #region Player Creation
             GameObject playerGameObject = new GameObject(gameWorld, new IntVector2(2, 1));
-            playerGameObject.AddComponent(new CharRenderer('@', playerGameObject));
+            playerGameObject.AddComponent(new CharRenderer(playerChar, playerGameObject));
             playerGameObject.AddComponent(new PlayerController(1, playerGameObject));
 
             playerGameObject.Create();
             #endregion
 
             #region Maze Generation
-            Rect mazeArea = new Rect(0, 5, 5, 5);
+            Rect mazeArea = new Rect(0, 5, mazeWidth, mazeHeight);
 
-            MazeGenerator mazeGenerator = new MazeGenerator(mazeArea, '&', gameWorld);
+            MazeGenerator mazeGenerator = new MazeGenerator(mazeArea, mazeWallChar, gameWorld);
             mazeGenerator.GenerateMaze();
             #endregion
 
             mazeGameLoop.StartGameLoop();
         }
 
-        [SupportedOSPlatform("windows")]
         public static void ConfigureConsole(IntVector2 size)
         {
-            Console.SetWindowSize(size.X, size.Y);
-            Console.SetBufferSize(size.X, size.Y);
+/*            Console.SetWindowSize(size.X, size.Y);
+            Console.SetBufferSize(size.X, size.Y);*/
 
             Console.CursorVisible = false;
         }

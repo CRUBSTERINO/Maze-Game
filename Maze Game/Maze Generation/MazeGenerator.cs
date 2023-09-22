@@ -9,6 +9,7 @@ namespace Maze_Game.MazeGeneration
         private Rect _area;
         private char _wallChar;
         private MazeGrid _grid;
+        private GameObject[,] _wallGameObjects;
         private GameWorld _gameWorld;
 
         public MazeGenerator(Rect mazeArea, char wallChar, GameWorld gameWorld)
@@ -16,17 +17,34 @@ namespace Maze_Game.MazeGeneration
             _area = mazeArea;
             _wallChar = wallChar;
             _gameWorld = gameWorld;
+            _wallGameObjects = new GameObject[mazeArea.Size.X, mazeArea.Size.Y];
 
-            _grid = new MazeGrid(new IntVector2(_area.Width, _area.Height), new IntVector2(0, 0));
+            _grid = new MazeGrid(_area.Size, new IntVector2(3, 0));
         }
 
         public void GenerateMaze()
         {
-            do
+            // Fill maze with cells
+            foreach (MazeCell cell in _grid.Cells) 
             {
-                CreateWallGameObject(_grid.ActiveCell.Position);
+                CreateWallGameObject(cell.Position + _area.Position);
             }
-            while (_grid.TryGetNextCell());
+
+            RandomizedDFS(_grid.InitialCell);
+        }
+
+        private void RandomizedDFS(MazeCell previousCell)
+        {
+            MazeCell nextCell;
+            previousCell.MarkAsVisited();
+
+            while (_grid.TryGetNextCell(previousCell, out nextCell))
+            {
+                nextCell.SetPreviousCell(previousCell);
+                DestroyWallGameObject(nextCell.Position);
+
+                RandomizedDFS(nextCell);
+            }
         }
 
         private void CreateWallGameObject(IntVector2 position)
@@ -34,63 +52,14 @@ namespace Maze_Game.MazeGeneration
             GameObject wallGameObject = new GameObject(_gameWorld, position);
             wallGameObject.AddComponent(new CharRenderer(_wallChar, wallGameObject));
             wallGameObject.Create();
-        }
-    }
 
-    public class MazeGrid
-    {
-        private IntVector2 _size;
-        private MazeCell[,] _cells;
-        private MazeCell _activeCell;
-
-        public MazeCell ActiveCell => _activeCell;
-
-        public MazeGrid(IntVector2 size, IntVector2 initialActiveCellPosition)
-        {
-            _size = size;
-            _cells = new MazeCell[size.X , size.Y];
-
-            for (int y = 0; y < size.Y; y++)
-            {
-                for (int x = 0; x < size.X; x++)
-                {
-                    _cells[x, y] = new MazeCell(new IntVector2(x, y));
-                }
-            }
-
-            _activeCell = _cells[initialActiveCellPosition.X, initialActiveCellPosition.Y];
+            position -= _area.Position;
+            _wallGameObjects[position.X, position.Y] = wallGameObject;
         }
 
-        public bool TryGetNextCell()
+        private void DestroyWallGameObject(IntVector2 position)
         {
-            if (_activeCell.Position.X + 1 < _size.X)
-            {
-                _activeCell = _cells[_activeCell.Position.X + 1, _activeCell.Position.Y];
-            }
-            else if (_activeCell.Position.Y + 1 < _size.Y)
-            {
-                _activeCell = _cells[0, _activeCell.Position.Y + 1];
-            }
-            else
-            {
-                return false;
-            }
-
-            return true;
-        }
-    }
-
-    public struct MazeCell
-    {
-        private IntVector2 _position;
-        private bool _isVisited;
-
-        public IntVector2 Position => _position;
-        public bool IsVisited => _isVisited;
-
-        public MazeCell(IntVector2 position)
-        {
-            _position = position;
+            _wallGameObjects[position.X, position.Y].Destroy();
         }
     }
 }

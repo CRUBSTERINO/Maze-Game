@@ -20,5 +20,10 @@ namespace Maze_Game.Rendering
 
             return ' ';
         }
+
+        public void SetRenderingChar(char renderingChar) 
+        {
+            _renderingChar = renderingChar;
+        }
     }
 }

@@ -16,7 +16,7 @@ namespace Maze_Game.GameLoop
 
         protected override void Time()
         {
-            Thread.Sleep(5);
+            Thread.Sleep(50);
         }
 
         protected override void ProcessInput()
@@ -37,8 +37,8 @@ namespace Maze_Game.GameLoop
 
         private void DisplayRenderedFrame(string renderedFrame)
         {
-            Console.Write(renderedFrame);
             Console.SetCursorPosition(0, 0);
+            Console.Write(renderedFrame);
         }
     }
 }

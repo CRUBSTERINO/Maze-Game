@@ -17,13 +17,21 @@ namespace Maze_Game.GameWorlds
             _gameObjects.Add(gameObject);
         }
 
+        public void Destroy(GameObject gameObject)
+        {
+            if (_gameObjects.Contains(gameObject))
+            {
+                _gameObjects.Remove(gameObject);
+            }
+        }
+
         public List<T> FindAllComponentsInWorld<T>() where T : Component
         {
             List<T> result = new List<T>();
             T tempComponent;
             foreach (GameObject gameObject in _gameObjects) 
             {
-                if (gameObject.TryGetComponent<T>(out tempComponent))
+                if (gameObject.TryGetComponent(out tempComponent) && tempComponent != null)
                 {
                     result.Add(tempComponent);
                 }

@@ -31,7 +31,7 @@ namespace Maze_Game
             return default(T);
         }
 
-        public bool TryGetComponent<T>(out T component) where T : Component
+        public bool TryGetComponent<T>(out T? component) where T : Component
         {
             foreach (var componentToCompare in _components)
             {
@@ -42,7 +42,7 @@ namespace Maze_Game
                 }
             }
 
-            component = default(T);
+            component = null;
             return false;
         }
 
@@ -60,6 +60,11 @@ namespace Maze_Game
         public void Create()
         {
             _gameWorld.Create(this);
+        }
+
+        public void Destroy()
+        {
+            _gameWorld.Destroy(this);
         }
 
         public void Start()
