@@ -16,7 +16,7 @@ namespace Maze_Game.GameLoop
 
         protected override void Time()
         {
-            Thread.Sleep(50);
+            Thread.Sleep(5);
         }
 
         protected override void ProcessInput()

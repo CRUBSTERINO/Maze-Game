@@ -39,9 +39,12 @@ namespace Maze_Game
             #endregion
 
             #region Maze Generation
+            Random random = new Random();
             Rect mazeArea = new Rect(0, 5, mazeWidth, mazeHeight);
+            IntVector2 startPosition = new IntVector2(random.Next(1, mazeWidth), 0);
+            IntVector2 finishPosition = new IntVector2(random.Next(1, mazeWidth), mazeHeight - 1);
 
-            MazeGenerator mazeGenerator = new MazeGenerator(mazeArea, mazeWallChar, gameWorld);
+            MazeGenerator mazeGenerator = new MazeGenerator(mazeArea, mazeWallChar, gameWorld, startPosition, finishPosition);
             mazeGenerator.GenerateMaze();
             #endregion
 

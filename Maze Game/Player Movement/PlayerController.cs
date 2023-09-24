@@ -25,16 +25,16 @@ namespace Maze_Game
                 switch (_movementDirection)
                 {
                     case MovementDirection.Up:
-                        movementVector = new IntVector2(0, -1);
+                        movementVector = IntVector2.Down * _speed;
                         break;
                     case MovementDirection.Down:
-                        movementVector = new IntVector2(0, 1);
+                        movementVector = IntVector2.Up * _speed;
                         break;
                     case MovementDirection.Left:
-                        movementVector = new IntVector2(-1, 0);
+                        movementVector = IntVector2.Left * _speed;
                         break;
                     case MovementDirection.Right:
-                        movementVector = new IntVector2(1, 0);
+                        movementVector = IntVector2.Right * _speed;
                         break;
                     default:
                         movementVector = new IntVector2(0, 0);
