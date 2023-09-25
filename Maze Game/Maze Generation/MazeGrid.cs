@@ -35,7 +35,7 @@ namespace Maze_Game.MazeGeneration
             _finishCell.IsFinishCell = true;
         }
 
-        public bool TryGetNextCell(MazeCell cell, out MazeCell neighbourCell)
+        public bool TryGetNextCell(MazeCell cell, out MazeCell? neighbourCell)
         {
             neighbourCell = GetUnvisitedNeighbour(cell);
 
@@ -47,7 +47,7 @@ namespace Maze_Game.MazeGeneration
             return true;
         }
 
-        private MazeCell GetUnvisitedNeighbour(MazeCell cell)
+        private MazeCell? GetUnvisitedNeighbour(MazeCell cell)
         {
             List<MazeCell> avaliableCells = new List<MazeCell>(4);
             MazeCell nextCell;

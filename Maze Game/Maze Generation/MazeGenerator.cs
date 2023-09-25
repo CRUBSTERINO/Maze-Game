@@ -1,5 +1,6 @@
 ﻿using Maze_Game.GameWorlds;
 using Maze_Game.Math;
+using Maze_Game.Physics;
 using Maze_Game.Rendering;
 
 namespace Maze_Game.MazeGeneration
@@ -69,6 +70,7 @@ namespace Maze_Game.MazeGeneration
         {
             GameObject wallGameObject = new GameObject(_gameWorld, position);
             wallGameObject.AddComponent(new CharRenderer(_wallChar, wallGameObject));
+            wallGameObject.AddComponent(new CharCollider(true, wallGameObject));
             wallGameObject.Create();
 
             position -= _area.Position;

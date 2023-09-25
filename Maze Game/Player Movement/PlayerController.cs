@@ -1,5 +1,4 @@
 ﻿using Maze_Game.Math;
-using System.Diagnostics;
 
 namespace Maze_Game
 {
@@ -7,11 +6,13 @@ namespace Maze_Game
     public class PlayerController : Component
     {
         private int _speed;
+        private Rect _areaOfMovement;
         private MovementDirection _movementDirection;
 
-        public PlayerController(int speed, GameObject gameObject) : base(gameObject)
+        public PlayerController(int speed, Rect areaOfMovement, GameObject gameObject) : base(gameObject)
         {
             _speed = speed;
+            _areaOfMovement = areaOfMovement;
         }
 
         public override void Update()
@@ -41,7 +42,10 @@ namespace Maze_Game
                         break;
                 }
 
-                _gameObject.Move(movementVector);
+                if (_areaOfMovement.IsInBounds(_gameObject.Position + movementVector))
+                {
+                    _gameObject.Move(movementVector);
+                }
             }
         }
 

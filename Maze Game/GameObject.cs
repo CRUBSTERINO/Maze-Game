@@ -18,7 +18,7 @@ namespace Maze_Game
             _position = position;
         }
 
-        public T GetComponent<T>() where T : Component
+        public T? GetComponent<T>() where T : Component
         {
             foreach (var component in _components)
             {
@@ -54,7 +54,12 @@ namespace Maze_Game
         public void Move(IntVector2 deltaMovement)
         {
             IntVector2 newPosition = _position + deltaMovement;
-            _position = newPosition;
+            SetPosition(newPosition);
+        }
+
+        public void SetPosition(IntVector2 position)
+        {
+            _position = position;
         }
 
         public void Create()

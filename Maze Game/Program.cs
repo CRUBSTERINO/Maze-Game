@@ -2,8 +2,8 @@
 using Maze_Game.GameWorlds;
 using Maze_Game.Math;
 using Maze_Game.MazeGeneration;
+using Maze_Game.Physics;
 using Maze_Game.Rendering;
-using System.Runtime.Versioning;
 
 namespace Maze_Game
 {
@@ -20,20 +20,22 @@ namespace Maze_Game
             const char playerChar = '@';
             const char mazeWallChar = '█';
 
-            IntVector2 viewportSize = new IntVector2(gameFieldWidth, gameFieldHeight);
-            IntVector2 consoleSize = new IntVector2(gameFieldWidth, gameFieldHeight);
-            Rect gameWorldSize = new Rect(0, 0, gameFieldWidth, gameFieldWidth);
+            Console.CursorVisible = false;
 
-            ConfigureConsole(consoleSize);
+            IntVector2 viewportSize = new IntVector2(gameFieldWidth, gameFieldHeight);
+            Rect gameWorldSize = new Rect(0, 0, gameFieldWidth, gameFieldWidth);
 
             GameWorld gameWorld = new GameWorld(gameWorldSize);
             GameRenderer gameRenderer = new GameRenderer(gameWorld, viewportSize);
             MazeGameLoop mazeGameLoop = new MazeGameLoop(gameWorld, gameRenderer);
 
             #region Player Creation
+            Rect playerAreaOfMovement = new Rect(0, 0, gameFieldWidth, gameFieldHeight);
+
             GameObject playerGameObject = new GameObject(gameWorld, new IntVector2(2, 1));
             playerGameObject.AddComponent(new CharRenderer(playerChar, playerGameObject));
-            playerGameObject.AddComponent(new PlayerController(1, playerGameObject));
+            playerGameObject.AddComponent(new PlayerController(1, playerAreaOfMovement, playerGameObject));
+            playerGameObject.AddComponent(new CharCollider(false, playerGameObject));
 
             playerGameObject.Create();
             #endregion
@@ -49,14 +51,6 @@ namespace Maze_Game
             #endregion
 
             mazeGameLoop.StartGameLoop();
-        }
-
-        public static void ConfigureConsole(IntVector2 size)
-        {
-/*            Console.SetWindowSize(size.X, size.Y);
-            Console.SetBufferSize(size.X, size.Y);*/
-
-            Console.CursorVisible = false;
         }
     }
 }

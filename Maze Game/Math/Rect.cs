@@ -19,5 +19,10 @@
             _position = position;
             _size = size;
         }
+
+        public bool IsInBounds(IntVector2 point)
+        {
+            return (point.X >= _position.X && point.X < _position.X + _size.X) && (point.Y >= _position.Y && point.Y < _position.Y + _size.Y);
+        }
     }
 }
