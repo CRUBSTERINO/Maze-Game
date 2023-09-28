@@ -73,6 +73,11 @@ namespace Maze_Game.GameWorlds
                     {
                         colliders[colliderIndex].UpdatePreviousPosition();
                     }
+                    else
+                    {
+                        colliders[colliderIndex].RecoverToPreviousPosition();
+                        colliders[colliderIndex].ResetCollisionStatus();
+                    }
                 }
             }
         }

@@ -43,12 +43,20 @@ namespace Maze_Game
             #region Maze Generation
             Random random = new Random();
             Rect mazeArea = new Rect(0, 5, mazeWidth, mazeHeight);
-            IntVector2 startPosition = new IntVector2(random.Next(1, mazeWidth), 0);
-            IntVector2 finishPosition = new IntVector2(random.Next(1, mazeWidth), mazeHeight - 1);
+            IntVector2 startLocalPosition = new IntVector2(random.Next(1, mazeWidth), 0);
+            IntVector2 finishLocalPosition = new IntVector2(random.Next(1, mazeWidth), mazeHeight - 1);
 
-            MazeGenerator mazeGenerator = new MazeGenerator(mazeArea, mazeWallChar, gameWorld, startPosition, finishPosition);
+            IntVector2 finishGlobalPosition = finishLocalPosition + mazeArea.Position;
+
+            MazeGenerator mazeGenerator = new MazeGenerator(mazeArea, mazeWallChar, gameWorld, startLocalPosition, finishLocalPosition);
             mazeGenerator.GenerateMaze();
             #endregion
+
+            GameObject winConditionsManagerGameObject = new GameObject(gameWorld, IntVector2.Zero);
+            WinConditionsManager winConditionsManager = winConditionsManagerGameObject.AddComponent(new WinConditionsManager(playerGameObject, finishGlobalPosition, winConditionsManagerGameObject));
+            winConditionsManager.OnMazeCompleted += () => Environment.Exit(0);
+
+            winConditionsManagerGameObject.Create();
 
             mazeGameLoop.StartGameLoop();
         }

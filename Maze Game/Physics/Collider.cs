@@ -21,23 +21,33 @@ namespace Maze_Game.Physics
             _previousPosition = _gameObject.Position;
         }
 
-        public override void Update()
-        {
-            if (_isStatic)
-            {
-                return;
-            }
+        /*        public override void Update()
+                {
+                    if (_isStatic)
+                    {
+                        return;
+                    }
 
-            if (_isInCollision)
-            {
-                _gameObject.SetPosition(_previousPosition);
-                _isInCollision = false;
-            }
+                    if (_isInCollision)
+                    {
+                        _gameObject.SetPosition(_previousPosition);
+                        _isInCollision = false;
+                    }
+                }*/
+
+        public void RecoverToPreviousPosition()
+        {
+            _gameObject.SetPosition(_previousPosition);
         }
 
         public void UpdatePreviousPosition()
         {
             _previousPosition = _gameObject.Position;
+        }
+
+        public void ResetCollisionStatus()
+        {
+            _isInCollision = false;
         }
 
         public abstract bool CheckCollision(Collider collider);

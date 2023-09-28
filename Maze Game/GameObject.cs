@@ -46,9 +46,10 @@ namespace Maze_Game
             return false;
         }
 
-        public void AddComponent<T>(T component) where T : Component
+        public T AddComponent<T>(T component) where T : Component
         {
             _components.Add(component);
+            return component;
         }
 
         public void Move(IntVector2 deltaMovement)
