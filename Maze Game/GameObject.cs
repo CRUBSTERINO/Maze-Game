@@ -88,5 +88,13 @@ namespace Maze_Game
                 component.Update();
             }
         }
+
+        public void PhysicsUpdate()
+        {
+            foreach (var component in _components)
+            {
+                component.PhysicsUpdate();
+            }
+        }
     }
 }

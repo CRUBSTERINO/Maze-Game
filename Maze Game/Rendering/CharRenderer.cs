@@ -6,7 +6,7 @@ namespace Maze_Game.Rendering
     {
         private char _renderingChar;
 
-        public CharRenderer(char renderingChar, GameObject gameObject) : base(gameObject)
+        public CharRenderer(GameObject gameObject, char renderingChar) : base(gameObject)
         {
             _renderingChar = renderingChar;
         }

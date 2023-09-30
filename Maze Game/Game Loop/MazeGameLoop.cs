@@ -27,7 +27,9 @@ namespace Maze_Game.GameLoop
         protected override void Update()
         {
             _gameWorld.UpdateGameObjects();
-            _gameWorld.UpdatePhysics();
+            _gameWorld.UpdateCollisions();
+            _gameWorld.UpdateGameObjectsPhysics();
+            _gameWorld.CleanUpDestroyedGameObjects();
         }
 
         protected override void Render()

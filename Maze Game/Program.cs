@@ -1,62 +1,45 @@
 ﻿using Maze_Game.GameLoop;
 using Maze_Game.GameWorlds;
 using Maze_Game.Math;
-using Maze_Game.MazeGeneration;
-using Maze_Game.Physics;
 using Maze_Game.Rendering;
 
 namespace Maze_Game
 {
     internal class Program
     {
+        public const int _gameFieldWidth = 30;
+        public const int _gameFieldHeight = 35;
+
+        public const int _mazeWidth = 30;
+        public const int _mazeHeight = 30;
+
+        public const int _coinNumber = 20;
+
+        public const char _playerChar = '@';
+        public const char _mazeWallChar = '█';
+        public const char _coinChar = '$';
+
         static void Main(string[] args)
         {
-            const int gameFieldWidth = 30;
-            const int gameFieldHeight = 35;
-
-            const int mazeWidth = 30;
-            const int mazeHeight = 30;
-
-            const char playerChar = '@';
-            const char mazeWallChar = '█';
-
             Console.CursorVisible = false;
 
-            IntVector2 viewportSize = new IntVector2(gameFieldWidth, gameFieldHeight);
-            Rect gameWorldSize = new Rect(0, 0, gameFieldWidth, gameFieldWidth);
+            IntVector2 viewportSize = new IntVector2(_gameFieldWidth, _gameFieldHeight);
+            Rect gameWorldSize = new Rect(0, 0, _gameFieldWidth, _gameFieldWidth);
 
             GameWorld gameWorld = new GameWorld(gameWorldSize);
             GameRenderer gameRenderer = new GameRenderer(gameWorld, viewportSize);
             MazeGameLoop mazeGameLoop = new MazeGameLoop(gameWorld, gameRenderer);
+            GameSetup gameSetup = new GameSetup();
 
-            #region Player Creation
-            Rect playerAreaOfMovement = new Rect(0, 0, gameFieldWidth, gameFieldHeight);
+            Rect playerAreaOfMovement = new Rect(0, 0, _gameFieldWidth, _gameFieldHeight);
+            gameSetup.CreatePlayer(gameWorld, playerAreaOfMovement, _playerChar);
 
-            GameObject playerGameObject = new GameObject(gameWorld, new IntVector2(2, 1));
-            playerGameObject.AddComponent(new CharRenderer(playerChar, playerGameObject));
-            playerGameObject.AddComponent(new PlayerController(1, playerAreaOfMovement, playerGameObject));
-            playerGameObject.AddComponent(new CharCollider(false, playerGameObject));
+            Rect mazeArea = new Rect(0, 5, _mazeWidth, _mazeHeight);
+            gameSetup.GenerateMaze(gameWorld, mazeArea, _mazeWallChar);
 
-            playerGameObject.Create();
-            #endregion
+            gameSetup.SpawnCoins(gameWorld, _coinChar, _coinNumber);
 
-            #region Maze Generation
-            Random random = new Random();
-            Rect mazeArea = new Rect(0, 5, mazeWidth, mazeHeight);
-            IntVector2 startLocalPosition = new IntVector2(random.Next(1, mazeWidth), 0);
-            IntVector2 finishLocalPosition = new IntVector2(random.Next(1, mazeWidth), mazeHeight - 1);
-
-            IntVector2 finishGlobalPosition = finishLocalPosition + mazeArea.Position;
-
-            MazeGenerator mazeGenerator = new MazeGenerator(mazeArea, mazeWallChar, gameWorld, startLocalPosition, finishLocalPosition);
-            mazeGenerator.GenerateMaze();
-            #endregion
-
-            GameObject winConditionsManagerGameObject = new GameObject(gameWorld, IntVector2.Zero);
-            WinConditionsManager winConditionsManager = winConditionsManagerGameObject.AddComponent(new WinConditionsManager(playerGameObject, finishGlobalPosition, winConditionsManagerGameObject));
-            winConditionsManager.OnMazeCompleted += () => Environment.Exit(0);
-
-            winConditionsManagerGameObject.Create();
+            gameSetup.SetupWinConditions(gameWorld);
 
             mazeGameLoop.StartGameLoop();
         }

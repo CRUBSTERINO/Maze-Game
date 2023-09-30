@@ -24,7 +24,7 @@ namespace Maze_Game.MazeGeneration
             {
                 for (int x = 0; x < size.X; x++)
                 {
-                    _cells[x, y] = new MazeCell(new IntVector2(x, y), true);
+                    _cells[x, y] = new MazeCell(new IntVector2(x, y), true, false);
                 }
             }
 
@@ -45,6 +45,36 @@ namespace Maze_Game.MazeGeneration
             }
             
             return true;
+        }
+
+        public List<IntVector2> GetAllEmptyCellLocalPositions()
+        {
+            List<IntVector2> emptyCells = new List<IntVector2>();
+
+            foreach (MazeCell cell in _cells)
+            {
+                if (cell.IsEmpty)
+                {
+                    emptyCells.Add(cell.Position);
+                }
+            }    
+
+            return emptyCells;
+        }
+
+        public List<IntVector2> GetAllOccupiedCellLocalPositions()
+        {
+            List<IntVector2> occupiedCells = new List<IntVector2>();
+
+            foreach (MazeCell cell in _cells)
+            {
+                if (!cell.IsEmpty)
+                {
+                    occupiedCells.Add(cell.Position);
+                }
+            }
+
+            return occupiedCells;
         }
 
         private MazeCell? GetUnvisitedNeighbour(MazeCell cell)

@@ -5,13 +5,11 @@ using Maze_Game.Rendering;
 
 namespace Maze_Game.MazeGeneration
 {
-
     public class MazeGenerator
     {
         private Rect _area;
         private char _wallChar;
         private MazeGrid _grid;
-        private GameObject[,] _wallGameObjects;
         private GameWorld _gameWorld;
 
         public MazeGenerator(Rect mazeArea, char wallChar, GameWorld gameWorld, IntVector2 startPosition, IntVector2 finishPosition)
@@ -26,13 +24,7 @@ namespace Maze_Game.MazeGeneration
 
         public void GenerateMaze()
         {
-            // Fill maze with gameObjects
             MazeCell[,] cells = _grid.Cells;
-
-            foreach (MazeCell cell in cells) 
-            {
-                CreateWallGameObject(cell.Position + _area.Position);
-            }
 
             for (int x = 0; x < _area.Size.X; x++)
             {
@@ -50,15 +42,33 @@ namespace Maze_Game.MazeGeneration
             _grid.FinishCell.CanBeVisited = true;
 
             RandomizedDFS(_grid.InitialCell);
+
+            foreach (IntVector2 emptyCellPosition in _grid.GetAllOccupiedCellLocalPositions())
+            {
+                CreateWallGameObject(emptyCellPosition + _area.Position);
+            }
+        }
+
+        public List<IntVector2> GetAllEmptyCellGlobalPositions()
+        {
+            List<IntVector2> emptyCellLocalPositions = _grid.GetAllEmptyCellLocalPositions();
+            List<IntVector2> emptyCellGlobalPositions = emptyCellLocalPositions;
+
+            for (int i = 0; i < emptyCellGlobalPositions.Count; i++)
+            {
+                emptyCellGlobalPositions[i] += _area.Position;
+            }
+
+            return emptyCellGlobalPositions;
         }
 
         private void RandomizedDFS(MazeCell previousCell)
         {
-            MazeCell nextCell;
+            MazeCell? nextCell;
             previousCell.IsVisited = true;
-            DestroyWallGameObject(previousCell.Position);
+            previousCell.IsEmpty = true;
 
-            while (_grid.TryGetNextCell(previousCell, out nextCell))
+            while (_grid.TryGetNextCell(previousCell, out nextCell) && nextCell != null)
             {
                 nextCell.PreviousCell = previousCell;
 
@@ -69,17 +79,11 @@ namespace Maze_Game.MazeGeneration
         private void CreateWallGameObject(IntVector2 position)
         {
             GameObject wallGameObject = new GameObject(_gameWorld, position);
-            wallGameObject.AddComponent(new CharRenderer(_wallChar, wallGameObject));
-            wallGameObject.AddComponent(new CharCollider(true, wallGameObject));
+            wallGameObject.AddComponent(new CharRenderer(wallGameObject, _wallChar));
+            wallGameObject.AddComponent(new CharCollider(wallGameObject, true, false));
             wallGameObject.Create();
 
             position -= _area.Position;
-            _wallGameObjects[position.X, position.Y] = wallGameObject;
-        }
-
-        private void DestroyWallGameObject(IntVector2 position)
-        {
-            _wallGameObjects[position.X, position.Y].Destroy();
         }
     }
 }

@@ -7,11 +7,13 @@ namespace Maze_Game.GameWorlds
     {
         protected Rect _worldSize;
         protected List<GameObject> _gameObjects;
+        private List<GameObject> _destroyedGameObjects;
 
         public GameWorld(Rect worldSize)
         {
             _worldSize = worldSize;
             _gameObjects = new List<GameObject>();
+            _destroyedGameObjects = new List<GameObject>();
         }
 
         public void Create(GameObject gameObject)
@@ -23,7 +25,7 @@ namespace Maze_Game.GameWorlds
         {
             if (_gameObjects.Contains(gameObject))
             {
-                _gameObjects.Remove(gameObject);
+                _destroyedGameObjects.Add(gameObject);
             }
         }
 
@@ -42,7 +44,15 @@ namespace Maze_Game.GameWorlds
             return result;
         }
 
-        public void UpdatePhysics()
+        public void UpdateGameObjects()
+        {
+            foreach (var gameObject in _gameObjects)
+            {
+                gameObject.Update();
+            }
+        }
+
+        public void UpdateCollisions()
         {
             List<Collider> colliders = new List<Collider>();
             foreach (GameObject gameObject in _gameObjects)
@@ -57,37 +67,33 @@ namespace Maze_Game.GameWorlds
             {
                 if (!colliders[colliderIndex].IsStatic)
                 {
-                    bool isCollided = false;
                     for (int colliderCheckingIndex = 0; colliderCheckingIndex < colliders.Count; colliderCheckingIndex++)
                     {
                         if (colliderCheckingIndex != colliderIndex)
                         {
-                            if(colliders[colliderIndex].CheckCollision(colliders[colliderCheckingIndex]))
-                            {
-                                isCollided = true;
-                            }
+                            colliders[colliderIndex].CheckCollision(colliders[colliderCheckingIndex]);
                         }
-                    }
-
-                    if (!isCollided)
-                    {
-                        colliders[colliderIndex].UpdatePreviousPosition();
-                    }
-                    else
-                    {
-                        colliders[colliderIndex].RecoverToPreviousPosition();
-                        colliders[colliderIndex].ResetCollisionStatus();
                     }
                 }
             }
         }
 
-        public void UpdateGameObjects()
+        public void UpdateGameObjectsPhysics()
         {
             foreach (var gameObject in _gameObjects)
             {
-                gameObject.Update();
+                gameObject.PhysicsUpdate();
             }
+        }
+
+        public void CleanUpDestroyedGameObjects()
+        {
+            foreach (GameObject gameObject in _destroyedGameObjects)
+            {
+                _gameObjects.Remove(gameObject);
+            }
+
+            _destroyedGameObjects.Clear();
         }
     }
 }

@@ -9,7 +9,7 @@ namespace Maze_Game
         private Rect _areaOfMovement;
         private MovementDirection _movementDirection;
 
-        public PlayerController(int speed, Rect areaOfMovement, GameObject gameObject) : base(gameObject)
+        public PlayerController(GameObject gameObject, int speed, Rect areaOfMovement) : base(gameObject)
         {
             _speed = speed;
             _areaOfMovement = areaOfMovement;

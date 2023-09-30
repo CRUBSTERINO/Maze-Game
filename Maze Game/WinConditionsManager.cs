@@ -9,7 +9,7 @@ namespace Maze_Game
 
         public event Action? OnMazeCompleted;
 
-        public WinConditionsManager(GameObject playerGameObject, IntVector2 finishCellPosition, GameObject gameObject) : base(gameObject)
+        public WinConditionsManager(GameObject gameObject, GameObject playerGameObject, IntVector2 finishCellPosition) : base(gameObject)
         {
             _playerGameObject = playerGameObject;
             _finishCellPosition = finishCellPosition;

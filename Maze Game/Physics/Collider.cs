@@ -1,5 +1,4 @@
 ﻿using Maze_Game.Math;
-using System.Runtime;
 
 namespace Maze_Game.Physics
 {
@@ -7,13 +6,18 @@ namespace Maze_Game.Physics
     {
         private IntVector2 _previousPosition;
         private bool _isStatic; // static = doesn't check the collisions with other / non-static = checks his collisions every frame
+        protected bool _isTrigger;
         protected bool _isInCollision;
 
         public bool IsStatic => _isStatic;
 
-        public Collider(bool isStatic, GameObject gameObject) : base(gameObject)
+        public event Action? OnCollisionEnter;
+        public event Action? OnTriggerEnter;
+
+        public Collider(GameObject gameObject, bool isStatic, bool isTrigger) : base(gameObject)
         {
             _isStatic = isStatic;
+            _isTrigger = isTrigger;
         }
 
         public override void Start()
@@ -21,36 +25,29 @@ namespace Maze_Game.Physics
             _previousPosition = _gameObject.Position;
         }
 
-        /*        public override void Update()
+        public override void PhysicsUpdate()
+        {
+            if (_isInCollision)
+            {
+                if (_isTrigger)
                 {
-                    if (_isStatic)
-                    {
-                        return;
-                    }
+                    OnTriggerEnter?.Invoke();
+                }
+                else
+                {
+                    _gameObject.SetPosition(_previousPosition);
+                    _isInCollision = false;
 
-                    if (_isInCollision)
-                    {
-                        _gameObject.SetPosition(_previousPosition);
-                        _isInCollision = false;
-                    }
-                }*/
-
-        public void RecoverToPreviousPosition()
-        {
-            _gameObject.SetPosition(_previousPosition);
+                    OnCollisionEnter?.Invoke();
+                }
+            }
+            else
+            {
+                _previousPosition = _gameObject.Position;
+            }
         }
 
-        public void UpdatePreviousPosition()
-        {
-            _previousPosition = _gameObject.Position;
-        }
-
-        public void ResetCollisionStatus()
-        {
-            _isInCollision = false;
-        }
-
-        public abstract bool CheckCollision(Collider collider);
+        public abstract void CheckCollision(Collider collider);
 
         public abstract bool GetCollision(IntVector2 point);
     }
