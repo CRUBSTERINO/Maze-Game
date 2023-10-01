@@ -15,11 +15,11 @@ namespace Maze_Game.Timer
 
         public override void Update()
         {
-            int timeLeft;
+            long timeLeft;
 
             if (_gameTimer.IsStarted)
             {
-                timeLeft = _gameTimer.FinishTime.Second - DateTime.Now.Second;
+                timeLeft = (_gameTimer.FinishTime.Ticks - DateTime.Now.Ticks) / TimeSpan.TicksPerSecond;
             }
             else
             {
