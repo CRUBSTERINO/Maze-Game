@@ -6,6 +6,8 @@ namespace Maze_Game.Coins
     {
         private Collider _collider;
 
+        public event Action<Coin>? OnCoinCollected;
+
         public Coin(GameObject gameObject, Collider collider) : base(gameObject)
         {
             _collider = collider;
@@ -17,6 +19,8 @@ namespace Maze_Game.Coins
         {
             _gameObject.Destroy();
             _collider.OnTriggerEnter -= PickUp;
+
+            OnCoinCollected?.Invoke(this);
         }
     }
 }

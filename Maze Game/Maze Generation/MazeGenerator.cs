@@ -17,7 +17,6 @@ namespace Maze_Game.MazeGeneration
             _area = mazeArea;
             _wallChar = wallChar;
             _gameWorld = gameWorld;
-            _wallGameObjects = new GameObject[mazeArea.Size.X, mazeArea.Size.Y];
 
             _grid = new MazeGrid(_area.Size, startPosition, finishPosition);
         }

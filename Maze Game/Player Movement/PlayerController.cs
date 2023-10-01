@@ -2,7 +2,6 @@
 
 namespace Maze_Game
 {
-
     public class PlayerController : Component
     {
         private int _speed;

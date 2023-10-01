@@ -20,25 +20,31 @@ namespace Maze_Game.Coins
             _coinNumber = coinNumber;
         }
 
-        public void SpawnCoins()
+        public List<Coin> SpawnCoins()
         {
             Random random = new Random();
+            List<Coin> coins = new List<Coin>(_coinNumber);
 
             for (int i = 0; i < _coinNumber; i++)
             {
                 int index = random.Next(0, _emptyCellPositions.Count);
-                SpawnCoinGameObject(_emptyCellPositions[index]);
+                Coin coin = SpawnCoinGameObject(_emptyCellPositions[index]);
+                coins.Add(coin);
             }
+
+            return coins;
         }
 
-        private void SpawnCoinGameObject(IntVector2 position)
+        private Coin SpawnCoinGameObject(IntVector2 position)
         {
             GameObject coinGameObject = new GameObject(_gameWorld, position);
             coinGameObject.AddComponent(new CharRenderer(coinGameObject, _coinChar));
             Collider coinCollider = coinGameObject.AddComponent(new CharCollider(coinGameObject, false, true));
-            coinGameObject.AddComponent(new Coin(coinGameObject, coinCollider));
+            Coin coinComponent = coinGameObject.AddComponent(new Coin(coinGameObject, coinCollider));
 
             coinGameObject.Create();
+
+            return coinComponent;
         }
     }
 }
