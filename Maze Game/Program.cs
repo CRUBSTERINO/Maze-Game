@@ -18,7 +18,11 @@ namespace Maze_Game
 
         public const int _coinNumber = 20;
         public const int _coinsCounterX = 33;
-        public const int _coinsCounterY = _gameFieldHeight / 2;
+        public const int _coinsCounterY = _gameFieldHeight / 2 - 2;
+
+        public const int _gameTimeInSeconds = 20;
+        public const int _timerPositionX = 33;
+        public const int _timerPositionY = _gameFieldHeight / 2 + 2;
 
         public const char _playerChar = '@';
         public const char _mazeWallChar = '█';
@@ -44,6 +48,8 @@ namespace Maze_Game
 
             gameManager.SpawnCoins(_coinChar, _coinNumber);
             gameManager.CreateCoinsCounter(new IntVector2(_coinsCounterX, _coinsCounterY));
+
+            gameManager.CreateGameTimer(TimeSpan.FromSeconds(_gameTimeInSeconds), new IntVector2(_timerPositionX, _timerPositionY));
 
             gameManager.SetupWinConditions();
 

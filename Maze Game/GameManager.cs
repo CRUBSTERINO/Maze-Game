@@ -4,6 +4,7 @@ using Maze_Game.Math;
 using Maze_Game.MazeGeneration;
 using Maze_Game.Physics;
 using Maze_Game.Rendering;
+using Maze_Game.Timer;
 
 namespace Maze_Game
 {
@@ -66,6 +67,18 @@ namespace Maze_Game
             coinsCounterGameObject.AddComponent(new CoinsCounter(coinsCounterGameObject, _coinsManager, textRenderer));
 
             coinsCounterGameObject.Create();
+        }
+
+        public void CreateGameTimer(TimeSpan interval, IntVector2 position)
+        {
+            GameObject timerGameObject = new GameObject(_gameWorld, position);
+            GameTimer timer = timerGameObject.AddComponent(new GameTimer(timerGameObject, interval));
+            TextFieldRenderer textRenderer = timerGameObject.AddComponent(new TextFieldRenderer(timerGameObject, ""));
+            timerGameObject.AddComponent(new GameTimerDisplay(timerGameObject, timer, textRenderer));
+
+            timerGameObject.Create();
+
+            timer.StartTimer();
         }
 
         public void SetupWinConditions()
