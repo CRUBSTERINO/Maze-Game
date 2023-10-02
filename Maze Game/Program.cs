@@ -1,13 +1,18 @@
-﻿using Maze_Game.GameLoop;
+﻿using Maze_Game.Coins;
+using Maze_Game.GameLoop;
 using Maze_Game.GameWorlds;
 using Maze_Game.Math;
 using Maze_Game.MazeGeneration;
 using Maze_Game.Rendering;
+using Maze_Game.Timer;
 
 namespace Maze_Game
 {
     internal class Program
     {
+        public const int _consoleWidth = 50;
+        public const int _consoleHeight = 40;
+
         public const int _gameFieldWidth = 30;
         public const int _gameFieldHeight = 35;
 
@@ -31,7 +36,7 @@ namespace Maze_Game
 
         static void Main(string[] args)
         {
-            Console.CursorVisible = false;
+            ConfigureConsole();
 
             IntVector2 viewportSize = new IntVector2(_viewportWidth, _viewportHeight);
             Rect gameWorldSize = new Rect(0, 0, _gameFieldWidth, _gameFieldWidth);
@@ -62,6 +67,13 @@ namespace Maze_Game
             #endregion
 
             mazeGameLoop.StartGameLoop();
+        }
+
+        public static void ConfigureConsole()
+        {
+            Console.CursorVisible = false;
+            Console.SetWindowSize(_consoleWidth, _consoleHeight);
+            Console.SetBufferSize(_consoleWidth, _consoleHeight);
         }
     }
 }
