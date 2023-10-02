@@ -30,6 +30,7 @@ namespace Maze_Game.GameLoop
             _gameWorld.UpdateCollisions();
             _gameWorld.UpdateGameObjectsPhysics();
             _gameWorld.CleanUpDestroyedGameObjects();
+            _gameWorld.InstantiateCreatedGameObjects();
         }
 
         protected override void Render()

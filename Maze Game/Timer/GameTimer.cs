@@ -35,6 +35,7 @@
 
             if (DateTime.Now.CompareTo(_finishTime) >= 0)
             {
+                _isStarted = false;
                 OnTimerFinished?.Invoke();
             }
         }

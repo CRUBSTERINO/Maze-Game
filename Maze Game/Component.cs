@@ -4,6 +4,8 @@
     {
         protected GameObject _gameObject;
 
+        public GameObject GameObject => _gameObject;
+
         public Component(GameObject gameObject)
         {
             _gameObject = gameObject;

@@ -1,6 +1,7 @@
 ﻿using Maze_Game.GameLoop;
 using Maze_Game.GameWorlds;
 using Maze_Game.Math;
+using Maze_Game.MazeGeneration;
 using Maze_Game.Rendering;
 
 namespace Maze_Game
@@ -20,7 +21,7 @@ namespace Maze_Game
         public const int _coinsCounterX = 33;
         public const int _coinsCounterY = _gameFieldHeight / 2 - 2;
 
-        public const int _gameTimeInSeconds = 20;
+        public const int _gameTimeInSeconds = 60;
         public const int _timerPositionX = 33;
         public const int _timerPositionY = _gameFieldHeight / 2 + 2;
 
@@ -38,20 +39,27 @@ namespace Maze_Game
             GameWorld gameWorld = new GameWorld(gameWorldSize);
             GameRenderer gameRenderer = new GameRenderer(gameWorld, viewportSize);
             MazeGameLoop mazeGameLoop = new MazeGameLoop(gameWorld, gameRenderer);
-            GameManager gameManager = new GameManager(gameWorld);
 
+            #region Game Setup
             Rect playerAreaOfMovement = new Rect(0, 0, _gameFieldWidth, _gameFieldHeight);
-            gameManager.CreatePlayer(playerAreaOfMovement, _playerChar);
+            IntVector2 playerDefaultPosition = new IntVector2(_gameFieldWidth / 2, 2);
+            PlayerSettings playerSettings = new PlayerSettings(playerAreaOfMovement, _playerChar, playerDefaultPosition);
 
             Rect mazeArea = new Rect(0, 5, _mazeWidth, _mazeHeight);
-            gameManager.GenerateMaze(mazeArea, _mazeWallChar);
+            MazeSettings mazeSettings = new MazeSettings(mazeArea, _mazeWallChar);
 
-            gameManager.SpawnCoins(_coinChar, _coinNumber);
-            gameManager.CreateCoinsCounter(new IntVector2(_coinsCounterX, _coinsCounterY));
+            CoinsGenerationsSettings coinsGenerationsSettings = new CoinsGenerationsSettings(_coinNumber, _coinChar);
 
-            gameManager.CreateGameTimer(TimeSpan.FromSeconds(_gameTimeInSeconds), new IntVector2(_timerPositionX, _timerPositionY));
+            IntVector2 coinsCounterPosition = new IntVector2(_coinsCounterX, _coinsCounterY);
+            CoinsCounterSettings coinsCounterSettings = new CoinsCounterSettings(coinsCounterPosition);
 
-            gameManager.SetupWinConditions();
+            IntVector2 gameTimerPosition = new IntVector2(_timerPositionX, _timerPositionY);
+            TimeSpan gameTimerInterval = TimeSpan.FromSeconds(_gameTimeInSeconds);
+            GameTimerSettings gameTimerSettings = new GameTimerSettings(gameTimerInterval, gameTimerPosition);
+
+            GameManager gameManager = new GameManager(gameWorld, playerSettings, mazeSettings, coinsGenerationsSettings, coinsCounterSettings, gameTimerSettings);
+            gameManager.SetupGame();
+            #endregion
 
             mazeGameLoop.StartGameLoop();
         }

@@ -8,17 +8,22 @@ namespace Maze_Game.GameWorlds
         protected Rect _worldSize;
         protected List<GameObject> _gameObjects;
         private List<GameObject> _destroyedGameObjects;
+        private List<GameObject> _createdGameObjects;
 
         public GameWorld(Rect worldSize)
         {
             _worldSize = worldSize;
             _gameObjects = new List<GameObject>();
             _destroyedGameObjects = new List<GameObject>();
+            _createdGameObjects = new List<GameObject>();
         }
 
         public void Create(GameObject gameObject)
         {
-            _gameObjects.Add(gameObject);
+            if (!_gameObjects.Contains(gameObject))
+            {
+                _createdGameObjects.Add(gameObject);
+            }
         }
 
         public void Destroy(GameObject gameObject)
@@ -94,6 +99,16 @@ namespace Maze_Game.GameWorlds
             }
 
             _destroyedGameObjects.Clear();
+        }
+
+        public void InstantiateCreatedGameObjects()
+        {
+            foreach (GameObject gameObject in _createdGameObjects)
+            {
+                _gameObjects.Add(gameObject);
+            }
+
+            _createdGameObjects.Clear();
         }
     }
 }
